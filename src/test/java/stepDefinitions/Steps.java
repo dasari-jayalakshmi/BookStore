@@ -15,7 +15,7 @@ import pageObjects.LoginPage;
 import pageObjects.ProfilePage;
 
 public class Steps {
-	
+
 	WebDriver driver;
 	public LoginPage loginPage;
 	public ProfilePage profilePage;
@@ -42,7 +42,7 @@ public class Steps {
 		Assert.assertTrue(match);
 		driver.close();
 	}
-	
+
 	@Then("I should see a Newuser button with the text {string}")
 	public void i_should_see_a_newuser_button_with_the_text(String newUserButtonText) {
 		String response = loginPage.getNewUserButtonText();
@@ -91,7 +91,7 @@ public class Steps {
 		loginPage.setUserEmailAddress(string);
 		loginPage.setPassword(string2);
 	}
-	
+
 	@Then("It should display error message as {string}")
 	public void it_should_display_error_message_as(String string) {
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -100,9 +100,8 @@ public class Steps {
 		Assert.assertTrue(match);
 		driver.close();
 	}
-	
-	
-	//Profile Page
+
+	// Profile Page
 	@Then("I can see {string} button and {string} button and {string} button")
 	public void i_can_see_button_and_button_and_button(String logOutButtonText, String string2, String string3)
 			throws InterruptedException {
@@ -113,14 +112,43 @@ public class Steps {
 		driver.close();
 	}
 
-	
-	@Then("after successul login redirected to book store page")
-	public void after_successul_login_redirected_to_book_store_page() {
-		profilePage.gotoBookStore();
+	@When("user click on DeleteAllBooks button")
+	public void user_click_on_delete_all_books_button() throws InterruptedException {
+		profilePage.clickOnDeleteAll();
 	}
-	
-	
-	//BookStore page
+
+	@Then("it should display deleteAllBooksPopUp")
+	public void it_should_display_delete_all_books_pop_up() {
+		String popupMessage = profilePage.getDeleteAllBooksPopUpMessage();
+		Boolean match = popupMessage.equalsIgnoreCase("Do you want to delete all books?");
+		Assert.assertTrue(match);
+	}
+
+	@Then("user click on OkayButtonOnDeleteAllBooksPopUp")
+	public void user_click_on_okay_button_on_delete_all_books_pop_up() {
+		profilePage.clickOkOnDeleteAllPopUp();
+	}
+
+	@Then("it should delete all books in the collection")
+	public void it_should_delete_all_books_in_the_collection() {
+		String text = profilePage.getNoRowsFoundText();
+		Boolean match = text.equalsIgnoreCase("No rows found");
+		Assert.assertTrue(match);
+	}
+
+	@When("user click on logout button")
+	public void user_click_on_logout_button() {
+		profilePage.clickLogout();
+	}
+
+	@Then("it should redirect the user to login page")
+	public void it_should_redirect_the_user_to_login_page() {
+		String currentUrl = driver.getCurrentUrl();
+		Boolean match = currentUrl.equalsIgnoreCase("https://demoqa.com/login");
+		Assert.assertTrue(match);
+	}
+
+	// BookStore page
 
 	@Then("can see list of books")
 	public void can_see_list_of_books() {
@@ -130,7 +158,6 @@ public class Steps {
 		driver.close();
 	}
 
-	
 	@Then("enter {string} in search box")
 	public void enter_in_search_box(String searchString) {
 		bookStorePage.setSearchString(searchString);
@@ -138,11 +165,11 @@ public class Steps {
 
 	@Then("it should display {string} book in results")
 	public void it_should_display_book_in_results(String nameOfTheBook) {
-	    String bookName = bookStorePage.getFilteredBookName();
-	    Assert.assertEquals(bookName,nameOfTheBook);
+		String bookName = bookStorePage.getFilteredBookName();
+		Assert.assertEquals(bookName, nameOfTheBook);
 		driver.close();
 	}
-	
+
 	@Then("user click book with name {string}")
 	public void user_click_book_with_name(String bookName) {
 		bookStorePage.setSearchString("");
@@ -151,11 +178,11 @@ public class Steps {
 
 	@Then("it should show book details page")
 	public void it_should_show_book_details_page() {
-	    String ISBN = bookStorePage.getISBN();
-	    Assert.assertEquals(ISBN,"9781449325862");
+		String ISBN = bookStorePage.getISBN();
+		Assert.assertEquals(ISBN, "9781449325862");
 		driver.close();
 	}
-	
+
 	@Then("user click on AddToYourCollection button")
 	public void user_click_on_add_to_your_collection_button() {
 		bookStorePage.clickAddToYourCollection();
@@ -165,8 +192,8 @@ public class Steps {
 	@Then("it should display popupMessage {string}")
 	public void it_should_display_popup_message(String string) {
 		String alertText = bookStorePage.getAlertMessageText();
-	    Assert.assertEquals(alertText,"Book added to your collection.");
-	    bookStorePage.clickOnAlertMessage();
+		Assert.assertEquals(alertText, "Book added to your collection.");
+		bookStorePage.clickOnAlertMessage();
 		driver.close();
 	}
 }

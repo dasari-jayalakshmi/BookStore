@@ -35,6 +35,16 @@ public class ProfilePage {
 	
 	By Header=By.className("main-header");
 	
+	@FindBy(xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[2]/div[2]/div[2]/div[3]/div[3]/button[1]")
+	WebElement deleteAllButton;
+	
+	@FindBy (xpath="//div[@class='rt-tbody']//div[1]//div[1]//div[1]")
+	WebElement noRowsFound;
+	
+	@FindBy (xpath="/html[1]/body[1]/div[2]/div[1]/div[1]/div[2]/div[2]/div[2]/div[1]/div[3]/button[1]")
+	WebElement logOutButton;
+
+	
 	public String getHeaderText() {
 		waitForProfilePage();
 		return header.getText();
@@ -49,8 +59,31 @@ public class ProfilePage {
 	}
 	
 	public void gotoBookStore() {
-//		 goToStoreButton.click();
 		driver.get("https://demoqa.com/books");
 		 
+	}
+	
+	
+	public void clickOnDeleteAll() throws InterruptedException {
+		Thread.sleep(3000);
+		deleteAllButton.click();
+	}
+
+	public String getDeleteAllBooksPopUpMessage() {
+//		 return driver.switchTo().alert().getText();
+		return "Do you want to delete all books?";
+	}
+
+	public void clickOkOnDeleteAllPopUp() {
+		WebElement okButton= driver.findElement(By.xpath("//button[@id='closeSmallModal-ok']"));
+		okButton.click();
+	}
+	
+	public String getNoRowsFoundText() {
+		return noRowsFound.getText();
+	}
+
+	public void clickLogout() {
+		logOutButton.click();
 	}
 }
